@@ -21,7 +21,7 @@ public interface BoardMapper {
 	int delete(Long bno);
 	
 	// 단건조회
-	int count();	// 기본형 int, string
+	BoardVO getBoard(Long bno);
 	
 	// 전체조회
 	List<BoardVO> getList();

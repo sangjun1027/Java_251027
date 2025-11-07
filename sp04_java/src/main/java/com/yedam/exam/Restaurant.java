@@ -1,0 +1,22 @@
+package com.yedam.exam;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
+
+
+public class Restaurant {
+	
+	Chef chef;
+	
+	public Restaurant(Chef chef) {
+		super();
+		this.chef = chef;
+	}
+
+	public void order() {
+		chef.cook();
+		
+	}
+	
+}
