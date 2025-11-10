@@ -1,6 +1,8 @@
 package com.yedam.board.web;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,11 +22,14 @@ public class ReplyController {
 
 	private final ReplyService replyService;
 	 
-	//등록
+	//댓글등록
 	@PostMapping("/reply")		//localhost/reply
-	public int insertReply(@RequestBody ReplyVO reply) {
-		replyService.insertReply(reply);
-		return replyService.insertReply(reply);
+	public Map<String, Object> insertReply(@RequestBody ReplyVO vo) {
+		int cnt = replyService.insertReply(vo);
+		Map<String, Object> map = new HashMap<>();		// {"result" : "success", "data" : 1 }
+		map.put("result", "success");
+		map.put("data", cnt);
+		return map;		//{result : "success", data:vo}
 	}
 	
 	//삭제
