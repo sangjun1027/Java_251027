@@ -4,14 +4,14 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>views/success.jsp</title>
 </head>
 <body>
-가입완료 <br>
+가입완료 : ${param.date}
+<br>
 ${param.name}
-${param.date}
 <script>
-let msg = "${msg}";
+let msg = "${msg}"; 
 if(msg){
 	alert(msg)
 }

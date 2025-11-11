@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+<head>
+<meta charset="UTF-8">
+<title>templates/emp.html</title>
+<style>
+	.writer { color : blue; }
+</style>
+</head>
+<body>
+<div layout:fragment="content">
+<a th:href="@{/emp/{bno}/{rno}/info(bno=7, rno=5)}"> 링크연습이랑께</a>
+<h3>사원관리</h3>
+<table class="table table-striped table-hover text-center align-middle shadow-sm">
+	<thead class="table-primary">
+		<tr>
+			<th>사원번호</th>
+			<th>이름</th>
+			<th>Email</th>
+			<th>급여</th>
+			<th>부서ID</th>
+			<th>직무ID</th>
+			<th>입사일자</th>
+		</tr>
+		<tr th:each="emp, stat : ${list}" th:object="${emp}">
+    		<td> [[${stat.count}]] </td>
+    		<td> [[${emp.empId}]] </td>
+    		<td> [[${emp.email}]] </td>
+    		<td> [[${emp.salary}]] </td>
+    		<td th:text="${#dates.format(emp.hdate, 'yyyy-MM-dd')}"></td>
+  </tr>
+	</thead>
+	<tbody id="empList">
+	</tbody>
+</table>
+<script>
+getList();
+function getList(){
+	fetch("/emp")
+	.then(response => response.json())
+	.then(response => {
+		const empList = document.querySelector("#empList");
+		for(emp of response) {
+			const newTag = `
+				<tr>
+				<td>${emp.employeeId}</td>
+				<td>${emp.firstName} ${emp.lastName}</td>
+				<td>${emp.email}</td>
+				<td>${emp.salary}</td>
+				<td>${emp.departmentId}</td>
+				<td>${emp.jobId}</td>
+				<td>${emp.hireDate ? emp.hireDate.substring(0,10) : ''}</td>
+			</tr>`;
+			empList.insertAdjacentHTML("afterbegin",newTag);
+		}
+	})
+}
+
+</script>
+
+</body>
+</html>

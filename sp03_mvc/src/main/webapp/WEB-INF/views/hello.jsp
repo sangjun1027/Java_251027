@@ -4,10 +4,12 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>hello.jsp</title>
+<title>hello</title>
 </head>
 <body>
-여기가 야구의 성지 라팍이다 !!! 
-<img src="/file/라팍.jpg" width="500">
+<div>
+<h3>myDog</h3>
+</div>
+<img src="/file/myDog.jpg" width="300">
 </body>
 </html>

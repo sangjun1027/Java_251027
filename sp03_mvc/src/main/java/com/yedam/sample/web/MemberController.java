@@ -6,27 +6,25 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import jakarta.validation.Valid;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
-@Slf4j
+@Log4j2
 @Controller
 public class MemberController {
 	
-	// 회원가입page
+	// 회원 가입 페이지
 	@GetMapping("/member")
-	public void memberForm(Member member) {
-		
-	}
+	public void memberForm(Member member) {}
 	
-	// 회원가입처리 page
+	// 회원 가입 처리
 	@PostMapping("/member")
-	public String memberRegister(@Valid Member member,	//유효성체크 
-								 BindingResult result) {
+	public String memberRegister(@Valid Member member, BindingResult result) {
+		
 		if(result.hasErrors()) {
 			return "/member";
 		} else {
-		log.info(member.toString());	//회원가입처리
-		return "redirect:/";
+			log.info(member);
+			return "redirect:/";			
 		}
-	}
+	} // end memberRegister
 }

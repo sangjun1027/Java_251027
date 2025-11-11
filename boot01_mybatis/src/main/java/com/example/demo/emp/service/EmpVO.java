@@ -1,7 +1,5 @@
 package com.example.demo.emp.service;
 
-import java.sql.Date;
-
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -15,11 +13,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class EmpVO {
     
-    MultipartFile[] uploadFile;
-    String profile;
-    String msg;
-    
-    @JsonProperty(value = "id") 
     String employeeId;
     
 	String firstName;

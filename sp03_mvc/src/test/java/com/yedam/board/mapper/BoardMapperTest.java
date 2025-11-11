@@ -10,20 +10,22 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration("file:WEB-INF/spring/")
+@ContextConfiguration(locations = "file:src/main/webapp/WEB-INF/spring/root-context.xml")
 public class BoardMapperTest {
 	
 	@Autowired BoardMapper boardMapper;
 	
 	@Test
-	public void 삭제() {
+	void deleteTest() {
 		Map<String, Object> map = new HashMap<>();
-		map.put("bno", 2l);
-		map.put("result","");
+		map.put("bno", 12l);
+		map.put("result", "");
 		
-		boardMapper.delete(map);
+		boardMapper.deleteBoard(map);
 		
-		System.out.println("result=" + map.get("result"));
+		System.out.println("result= " + map.get("result"));
 	}
+	
+	
 	
 }

@@ -1,7 +1,6 @@
 package com.yedam.board;
 
-import java.sql.Date;
-import java.util.List;
+import java.util.Date;
 
 import lombok.Data;
 
@@ -14,5 +13,4 @@ public class ReplyVO {
 	private String replyer;
 	private Date replydate;
 	private Date updatedate;
-	
 }

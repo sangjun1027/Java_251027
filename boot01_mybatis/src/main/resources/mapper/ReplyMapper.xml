@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.board.mapper.ReplyMapper">
+
+	
+	<!-- 댓글목록 -->
+	<select id= "ListReply">
+		SELECT bno,
+			   rno,
+			   reply,
+			   replyer,
+			   replydate,
+			   updatedate
+		FROM   tbl_reply
+		WHERE bno = #{bno}
+		ORDER BY rno DESC
+	</select>
+	
+	<!--  등록 -->
+	<insert id="insertReply">
+		<selectKey keyProperty="bno" order="BEFORE" resultType="long">
+		SELECT seq_reply.nextval
+		FROM   dual
+		</selectKey>
+		INSERT INTO tbl_reply(bno, rno, reply, replyer)
+		VALUES (#{bno}, #{rno}, #{reply}, #{replyer})
+	</insert>
+	
+	<!--  삭제 -->
+	<delete id="delete">
+		DELETE 
+		FROM   tbl_reply
+		WHERE  rno = #{rno}
+	</delete>
+	
+	
+</mapper>

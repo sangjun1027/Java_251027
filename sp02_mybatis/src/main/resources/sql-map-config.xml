@@ -7,10 +7,11 @@
    </settings> 
    <typeAliases>   
       <!-- <typeAlias alias="board" type="com.springbook.board.BoardVO" /> --> 
+      <typeAlias type="com.mapper.Employee" alias="employee"/>
       <package name="com"/> 
    </typeAliases> 
    <typeHandlers> 
       <!-- java.sql.Timestamp 를 java.util.Date 형으로 반환 --> 
       <typeHandler javaType="java.sql.Date" handler="org.apache.ibatis.type.DateTypeHandler"/> 
    </typeHandlers> 
-</configuration>
+</configuration> 

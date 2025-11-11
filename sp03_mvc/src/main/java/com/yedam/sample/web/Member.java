@@ -16,7 +16,7 @@ import lombok.Data;
 
 @Data
 public class Member {
-
+	
     @NotNull(message = "Name cannot be null")
     private String name;
 

@@ -1,73 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yedam.board.mapper.BoardMapper">
-
+	<!-- PK는 id, 나머지는 result -->
 	<resultMap type="BoardVO" id="boardmap">
-		<id column="bno" property="bno" />
+		<id column="BNO" property="bno"/>
 		<result column="title" property="title"/>
 		<result column="writer" property="writer"/>
 		<result column="content" property="content"/>
 		<result column="regdate" property="regdate"/>
 		<result column="updatedate" property="updatedate"/>
 		<collection property="reply" ofType="ReplyVO">
-			<id column="rno" property="rno"/>
-			<result column="reply" property="reply"/>
-			<result column="replyer" property="replyer"/>
+		    <id column="rno" property="rno"/>
+		    <result column="reply" property="reply"/>
+		    <result column="replyer" property="replyer"/>
 		</collection>
-		
 	</resultMap>
 	
-	<!--  게시글 + 댓글 전체조회  -->
-	<select id= "getList" resultMap="boardmap">
-		SELECT a.*,
+	<select id="getList" resultMap="boardmap">
+        SELECT a.*,
                b.rno,
                b.reply,
                b.replyer
         FROM   tbl_board a
         LEFT OUTER JOIN tbl_reply b ON (a.bno = b.bno)
-	</select>
+	</select>	
 	
-	<!--  단건조회 -->
-	<select id="getBoard">
-		SELECT *
-		FROM   tbl_board
-		WHERE  bno = #{bno}
-	</select>
-	
-	<!-- 전체조회 검색조건 -->
-	<select id="getListByWriter">
-		SELECT *
-		FROM   tbl_board
-		<where>
-			<if test="writer != null">AND  writer like '%' || #{writer} || '%'</if>
-						   <!-- '%${  }%' -->
-			<if test="title != null"> AND    title  like '%' || #{title} || '%'</if>
-		</where> 						   
-	</select>
-	
-	<!--  등록 -->
 	<insert id="insertBoard">
-		<selectKey keyProperty="bno" order="BEFORE" resultType="long">
-		SELECT seq_board.nextval
-		FROM   dual
-		</selectKey>
-		INSERT INTO tbl_board(bno, title, content, writer)
-		VALUES (#{bno}, #{title}, #{content}, #{writer})
+	    <selectKey keyProperty="bno" order="BEFORE" resultType="Long">
+	      SELECT seq_board.nextval
+	      FROM   dual
+	    </selectKey>
+        INSERT INTO tbl_board(bno, title, content, writer)
+        VALUES (#{bno}, #{title}, #{content}, #{writer})
 	</insert>
 	
-	<!--  수정 -->
 	<update id="updateBoard">
 		UPDATE tbl_board
-		SET title = #{title}, content = #{content} 
-		WHERE bno = #{bno}
+		SET    title = #{title}, content = #{content}
+		WHERE  bno = #{bno}
 	</update>
 	
-	<!--  삭제 -->
-	<delete id="delete">
-		DELETE 
-		FROM   tbl_board
-		WHERE  bno = #{bno}
+	<!-- 프로시저 이용한 게시글 삭제 -->
+	<delete id="deleteBoard" statementType="CALLABLE" parameterType="Map">		
+		{ call RPOC_BOARD_DELETE( #{bno},
+		                          #{result, mode=OUT, jdbcType=VARCHAR, javaType=string} ) }
 	</delete>
 	
+	<select id="getListByBno">
+	    SELECT *
+	    FROM   tbl_board
+	    WHERE  bno = #{bno}
+	</select> 
 	
+	<select id="getListByWriter">
+	    SELECT *
+	    FROM   tbl_board
+	    <where>
+	      <if test="writer != null"> AND writer like ('%${writer}%') </if>
+	      <if test="title != null"> AND title like ('%${title}%') </if>
+	    </where>  
+	</select>
+	
+	<!-- 
+	<insert id="insertReply">
+		<selectKey keyProperty="rno" order="BEFORE" resultType="Long">
+	      SELECT seq_reply.nextval
+	      FROM   dual
+	    </selectKey>
+		INSERT INTO tbl_reply(rno, bno, reply, replyer)
+        VALUES (#{rno}, #{bno}, #{repy}, #{replyer})
+	</insert>
+	 -->
 </mapper>

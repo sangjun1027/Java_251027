@@ -18,52 +18,56 @@ import lombok.extern.log4j.Log4j2;
 @Controller
 @RequestMapping("/sample/*")
 public class SampleController {
+
+	// 빈 문자열이면 추가 경로 없음 = 클래스 매핑 그대로. /sample
+	// RequestMapping => method 여러 개 실행 가능
+	@RequestMapping(value = {"insert", "/"}, method = { RequestMethod.POST, RequestMethod.GET })
+	public void basic() {
+		// Log4j2 어노테이션
+		log.info("basic..."); // syso 대신
+	}
+	
+	@GetMapping("/ex01") // ex01?name=aaa&age=20	// 페이징
+	public String ex01(@ModelAttribute("sample") SampleDTO sample, RedirectAttributes rda) {
+		log.info("sampleDTO: " + sample);
+		rda.addFlashAttribute("msg", "가입축하"); // addFlashAttribute 휘발성
+		rda.addAttribute("name", sample.getName());
+		rda.addAttribute("date", new Date());
+		// redirect 없으면 forward
+		// redirect 뒤에는 매핑 url을 적어줌
+		// forward 뒤에는 페이지명
+		// return "redirect:/success"  => 절대경로 : /success
+		return "redirect:success";  // => 상대경로 : /sample/success
+		
+	}
+	
 	@GetMapping("/success")
 	public String success() {
-		return "success";
+		return "/success";
 	}
 	
-	// 빈 문자열이므로 추가 경로 없음 = 클래스 매핑 그대로
-	@RequestMapping(value={"insert", "/"}, method = {RequestMethod.POST, RequestMethod.GET})		// return값이 아무것도 없으면 localhost/sample
-	public void basic() {
-		// log4j2(lombok) 어노테이션 
-		log.info("basic....");		// syso 대신
-	}
-	
-	@GetMapping("/ex01")	//ex01?name=aaa&age=20 	// 페이징
-	public String ex01(@ModelAttribute("sample") SampleDTO sample,
-												 RedirectAttributes ra) {
-		log.info("sampleDTO" + sample);
-		ra.addFlashAttribute("msg", "가입축하!!!");	// addFlash는 휘발성, 1번만!
-		ra.addAttribute("name", sample.getName());
-		ra.addAttribute("date", new Date());
-		//return "redirect:success";	// http://localhost:81/success
-										// redirect 뒤에는 매핑 url을 적어줌
-										// forword 뒤에는 페이지 명
-		return "redirect:/sample/success";	// 절대경로로 설정해줘야 됨
-	}
-	
-	
-	@GetMapping("/ex02")		// ex02?name=aaa&age=20		//페이징
-	public String ex02(@RequestParam ("name") String name,
-					   @RequestParam(value = "birth") Date birth,
-					   @RequestParam(value = "age", 
-					   				 required = false,
-					   				 defaultValue = "10") int age) {
-		log.info(name + ":" + age);
+	// int는 null 불가, Integer는 null 가능
+	// ex02?name=aaa&age=20	// 페이징
+	@GetMapping("/ex02")
+	public String ex02(@RequestParam("name") String name,
+						@RequestParam(value = "birth") Date birth,
+						@RequestParam(value = "age",
+									  required = false,
+									  defaultValue = "10") int age) {
+		log.info(name + " : " + age + " : " + birth);
 		return "ex02";
 	}
-
-	@GetMapping("/ex02Array")					// ex02?ids=3&ids=4&ids=10 	//체크박스
-	public void ex02Array(@RequestParam("ids") List<String> ids ) {
-		log.info("ids:" + ids);
+	
+	@GetMapping("/ex02Array")	// ex02Array?ids=3&ids=4&ids=10 // 체크박스
+	public void ex02Array(@RequestParam("ids") List<String> ids) {
+		log.info("ids: " + ids);
 	}
 	
 	@GetMapping("/ex03")
 	public ModelAndView ex03() {
 		ModelAndView mv = new ModelAndView("/hello", "greet", "hi");
-		// mv.setViewName("/hello");
-		// mv.addObject("greet","hi");
+//		mv.setViewName("/hello");
+//		mv.addObject("greet","hi");
 		return mv;
 	}
-}
+} // end class
