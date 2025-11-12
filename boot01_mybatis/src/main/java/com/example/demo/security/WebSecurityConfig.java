@@ -24,24 +24,30 @@ public class WebSecurityConfig {
 	}
 
 	@Bean
+	public AuthenticationSuccessHandler authenticationSuccessHandler() {	//authenticationSuccessHandler : method
+		return new CustomLoginSuccessHandler();
+	}
+	
+	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		http
-			.authorizeHttpRequests((requests) -> requests	// 인가체크
-				.requestMatchers("/", "/home", "/css/*", "/js/*", "/assets/*")
-				.permitAll().requestMatchers("/admin/*", "/empMain").hasRole("ADMIN")	//admin권한만 접근가능
-				.anyRequest().authenticated()	//로그인해야 접근가능
-				)	
-				.formLogin((form) -> form.permitAll()
-						.loginPage("/login")
-						//.usernameParameter("userid")
-						//.successForwardUrl("/empMain"))
-				.logout((logout) -> logout.deleteCookies("JSESSIONID").permitAll())
-			
-				//.csrf((csrf) -> csrf.ignoringRequestMatchers("/api/*"));
-				.csrf(csrf -> csrf.disable());
-				;
+	    http
+	        .authorizeHttpRequests(requests -> requests
+	            .requestMatchers("/", "/home", "/css/*", "/js/*", "/assets/*").permitAll()
+	            .requestMatchers("/admin/*", "/empMain").hasRole("ADMIN")
+	            .anyRequest().authenticated()
+	        )
+	        .formLogin(form -> form
+	            .loginPage("/login")
+	            .successHandler(authenticationSuccessHandler())
+	            .permitAll()
+	        )
+	        .logout(logout -> logout
+	            .deleteCookies("JSESSIONID")
+	            .permitAll()
+	        );
+	        // .csrf(csrf -> csrf.ignoringRequestMatchers("/api/*"));
+	        // .csrf(csrf -> csrf.disable());
 
-			return http.build();
-		}
-
+	    return http.build();
+	}
 } // end of class
